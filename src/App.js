@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import SignIn from './Components/SignIn';
+import ToDoAppContainer from './Containers/ToDoAppContainer';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    user: {},
+    valid: false
+  }
+  getUser = (e, user) => {
+    e.preventDefault()
+    this.validateUser(user)
+  }
+
+  validateUser = (user)=>{
+    if (user.email.includes("@") && user.email.length > 6 && user.password.length >= 6) {
+      this.setState({
+        user: user,
+        valid:true
+      })
+    }else if (!user.email.includes("@") && user.email.length) {
+      window.alert("Invalid Email Address")
+    }else if (user.password.length < 6) {
+      window.alert("Invalid Password")
+    }
+  }
+  render() {
+    return (
+      <div>      
+        {this.state.valid ? (<ToDoAppContainer/>):(<SignIn getUser={this.getUser}/>)}
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
